@@ -29,6 +29,7 @@ export const NewTodo = ({ addTodo }: AddTodo) => {
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: { todo: "" },
+    mode: "onSubmit",
     resolver: zodResolver(schema),
   });
 
@@ -40,6 +41,7 @@ export const NewTodo = ({ addTodo }: AddTodo) => {
           noValidate
           component="form"
           onSubmit={handleSubmit(addTodo)}
+          method="post"
         >
           <StyledTextField
             variant="standard"
