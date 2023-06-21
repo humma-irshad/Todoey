@@ -2,6 +2,7 @@
 
 import { ZodType, z } from "zod";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormControl } from "@mui/material";
 import Link from "next/link";
@@ -15,6 +16,7 @@ import {
   StyledStack,
   StyledTextField,
 } from "./NewTodo.style";
+import { rhfServerAdapter } from "@/util/misc";
 
 type AddTodo = { addTodo: (data: IFormData) => Promise<void> };
 
@@ -33,6 +35,8 @@ export const NewTodo = ({ addTodo }: AddTodo) => {
     resolver: zodResolver(schema),
   });
 
+  const { push: pushRoute } = useRouter();
+
   return (
     <>
       <HeadingTypography variant="h3">New Todo</HeadingTypography>
@@ -40,8 +44,9 @@ export const NewTodo = ({ addTodo }: AddTodo) => {
         <FormControl
           noValidate
           component="form"
-          onSubmit={handleSubmit(addTodo)}
-          method="post"
+          onSubmit={handleSubmit(
+            rhfServerAdapter(addTodo, { onSuccess: () => pushRoute("/") })
+          )}
         >
           <StyledTextField
             variant="standard"
